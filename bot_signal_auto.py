@@ -2,38 +2,39 @@ import telebot
 import time
 from tradingview_ta import TA_Handler, Interval, Exchange
 
-# Ton token de bot Telegram
-TOKEN = "8316897859:AAHmXr5diMPjS41L6nihI3jeLfmp5gvgGrI"
+# === Configuration du bot Telegram ===
+TOKEN = "8316897859:AAHmXr5diMPjS4lL7kMiRrKQcnk0WeXl0Pg"  # Ton token de bot
 bot = telebot.TeleBot(TOKEN)
 
-# Configuration de l'analyse TradingView
+# === Configuration de l'analyse TradingView ===
 analyse = TA_Handler(
     symbol="AUDCAD",
     screener="forex",
-    exchange="FX_IDC",
-    interval=Interval.INTERVAL_2_MINUTES  # Analyse toutes les 2 minutes
+    exchange="FX_IDC",   # Marché Forex
+    interval=Interval.INTERVAL_5_MINUTES  # Analyse toutes les 5 minutes
 )
 
+# === Fonction pour obtenir le signal TradingView ===
+def get_signal():
+    try:
+        result = analyse.get_analysis()
+        signal = result.summary
+        recommendation = signal.get('RECOMMENDATION', 'UNKNOWN')
+        return recommendation
+    except Exception as e:
+        return f"Erreur d’analyse : {e}"
+
+# === Commande /start ===
 @bot.message_handler(commands=['start'])
-def start(message):
-    bot.reply_to(message, "🔍 Analyse en cours sur AUD/CAD (TradingView)...")
+def start_message(message):
+    bot.reply_to(message, "🤖 Bot d’analyse TradingView activé pour AUD/CAD OTC !")
+    bot.reply_to(message, "Je vais te donner une recommandation toutes les 5 minutes 📊")
+
     while True:
-        try:
-            data = analyse.get_analysis()
-            signal = data.summary["RECOMMENDATION"]
+        signal = get_signal()
+        bot.send_message(message.chat.id, f"📈 Recommandation actuelle pour AUD/CAD : {signal}")
+        time.sleep(300)  # toutes les 5 minutes
 
-            if signal == "STRONG_BUY" or signal == "BUY":
-                msg = "📈 SIGNAL: CALL (Achat) sur AUD/CAD OTC"
-            elif signal == "STRONG_SELL" or signal == "SELL":
-                msg = "📉 SIGNAL: PUT (Vente) sur AUD/CAD OTC"
-            else:
-                msg = "⚖️ SIGNAL: Neutre, pas d'entrée maintenant"
-
-            bot.send_message(message.chat.id, msg)
-            time.sleep(120)  # Attend 2 minutes avant la prochaine analyse
-
-        except Exception as e:
-            bot.send_message(message.chat.id, f"Erreur: {e}")
-            time.sleep(60)
-
-bot.polling()
+# === Lancement du bot ===
+print("✅ Bot lancé et connecté à Telegram...")
+bot.polling(non_stop=True)
