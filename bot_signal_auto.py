@@ -52,3 +52,17 @@ def send_signal(message, pair):
 # --- Lancer le bot ---
 print("✅ Signal Trader Pro est en ligne...")
 bot.polling(non_stop=True)
+# --- Garder le bot éveillé ---
+from flask import Flask
+import threading
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Bot Signal Auto est en ligne ✅"
+
+def run():
+    app.run(host='0.0.0.0', port=10000)
+
+threading.Thread(target=run).start()
