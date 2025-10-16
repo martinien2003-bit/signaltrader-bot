@@ -38,3 +38,19 @@ def start_message(message):
 # === Lancement du bot ===
 print("✅ Bot lancé et connecté à Telegram...")
 bot.polling(non_stop=True)
+# === Commande /start ===
+@bot.message_handler(commands=['start'])
+def start_message(message):
+    bot.reply_to(message, "🚀 Analyse TradingView activée pour AUD/CAD OTC !")
+    signal = get_signal()
+    bot.send_message(message.chat.id, f"📊 Signal actuel : {signal}")
+
+# === Boucle principale ===
+while True:
+    try:
+        signal = get_signal()
+        print(f"Signal TradingView : {signal}")
+        time.sleep(300)  # met à jour toutes les 5 minutes
+    except Exception as e:
+        print(f"Erreur : {e}")
+        time.sleep(60)
