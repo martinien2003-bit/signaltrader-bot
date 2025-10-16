@@ -1,1 +1,2 @@
 pyTelegramBotAPI
+tradingview_ta
