@@ -3,7 +3,8 @@ import random
 from flask import Flask, request
 
 # Ton token ici
-TOKEN = "8316897859:AAHmXr5diMPjS41L6ninI3jeLfmp5gvgGrI"
+TOKEN = TOKEN = "8316897859:AAHmXr5diMPjS41L6nihI3jeLfmp5gvgGrI"
+
 bot = telebot.TeleBot(TOKEN)
 
 # App Flask pour Render
