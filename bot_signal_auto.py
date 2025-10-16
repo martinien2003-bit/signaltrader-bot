@@ -8,11 +8,10 @@ bot = telebot.TeleBot(TOKEN)
 
 # Liste de signaux automatiques (tu peux modifier ou ajouter)
 signaux = [
-    "💹 AUD/CAD → CALL ↑ (5 min)",
-    "📈 EUR/USD → PUT ↓ (3 min)",
-    "💰 GBP/JPY → CALL ↑ (1 min)",
-    "📊 USD/CHF → PUT ↓ (2 min)",
-    "🔥 AUD/USD → CALL ↑ (5 min)"
+    signaux =
+    "💹 AUD/CAD OTC → CALL ↑ (2 min)",
+    "📉 AUD/CAD OTC → PUT ↓ (2 min)"
+
 ]
 
 # Quand on envoie /start, le bot démarre et envoie des signaux automatiquement
